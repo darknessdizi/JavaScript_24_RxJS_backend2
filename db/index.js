@@ -3,12 +3,7 @@ const { faker } = require('@faker-js/faker'); // импортируем faker и
 const dataBase = {
   listPosts: [],
   listNewPosts: [],
-  listUsers: [{
-    author_id: '12345',
-    author: 'Liza Smit',
-    avatar: 'LiSa99',
-    image: 'http://url-liza-smitnaya.com',
-  }],
+  listUsers: [],
 
   getPosts() {
     // Возвращает список новых сообщений
@@ -40,7 +35,9 @@ const dataBase = {
     if ((status === 1) || (this.listUsers.length === 0)) {
       const user = this.createNewUser(); // создаем пользователя
       // Добавляем в obj поля от user
-      Object.entries(user).map(([key, value]) => obj[key] = value);
+      Object.entries(user).forEach(([key, value]) => {
+        obj[key] = value;
+      });
     } else {
       const index = Math.floor(Math.random() * this.listUsers.length);
 
@@ -58,8 +55,8 @@ const dataBase = {
     const obj = {
       author_id: faker.string.uuid(),
       author: faker.person.fullName(),
-      avatar: faker.internet.userName(),
-      image: faker.image.avatar(),
+      avatar: faker.image.avatar(),
+      image: faker.image.urlLoremFlickr({ width: 640, height: 480, category: ['nature', 'people', 'cats'] }),
     };
     this.listUsers.push(obj); // сохраняем нового пользователя
     return obj;
@@ -91,7 +88,7 @@ const dataBase = {
       author_id: user.id,
       author: user.author,
       avatar: user.avatar,
-      content: faker.internet.emoji(),
+      content: faker.internet.emoji({ types: ['smiley', 'body', 'person', 'nature'] }),
       created: date.getTime(),
     };
     return obj;
